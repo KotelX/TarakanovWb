@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Contact";
+}
+<main>
+    <section>
+        <div>
+            @if (ViewBag.isNewUser == true)
+            {
+                <p>
+                    @ViewBag.ThisEatens.User.Name
+                    Мы рады приветствовать вас в нашем сообществе!
+                    Вы только что съели @ViewBag.ThisEatens.Dishes.Name! За сегодня @ViewBag.ThisEatens.Dishes.Name было съедено @ViewBag.EatensThisToday раз!
+                </p>
+            }
+            else
+            {
+                <p>
+                    @ViewBag.ThisEatens.User.Name,
+                    с возвращением! Вы только что съели @ViewBag.ThisEatens.Dishes.Name!
+                    Всего вы съели @ViewBag.ThisEatens.Dishes.Name
+                    @ViewBag.EatensThisAlready раз!
+                    За сегодня @ViewBag.ThisEatens.Dishes.Name было съедено @ViewBag.EatensThisToday раз!
+                </p>
+            }
+        </div>
+    </section>
+    <section>
+        <p>Также люди едят:</p>
+        <div>
+            @for (int i = 0; i < ViewBag.Eatens.Count; i++)
+            {
+                <p>@ViewBag.Eatens[i].Date  @ViewBag.Eatens[i].User.Name (@ViewBag.Eatens[i].User.Email ) съел @ViewBag.Eatens[i].Dishes.Name</p>
+                if (i > 15)
+                {
+                    break;
+                }
+            }
+        </div>
+    </section>
+</main>

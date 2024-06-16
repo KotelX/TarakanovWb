@@ -1,0 +1,100 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<main>
+    <section>
+        <!-- Модальное окно -->
+        <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title"> Добавить новое блюдо </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-row row">
+                                <label for="validationDefault03"> Название </label>
+                                <input type="text" class="form-control" id="validationDefault03" name="name" placeholder="Название" value="" required>
+                                <small id="dishNameHelp" class="form-text text-danger d-none">Такое блюдо уже есть!</small>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                            <button id="addDishes" type="button" class="btn btn-primary">Добавить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <form id="addDishes" method="post" action="/Home/Feeds">
+            <div class="form-row row">
+                <div class="col-md-3 mb-3">
+                    <label for="validationDefault01">Имя</label>
+                    <input type="text" class="form-control" name="userName" id="validationDefault01" placeholder="Имя" value="" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="validationDefault02">email</label>
+                    <input type="email" class="form-control" name="email" id="validationDefault02" placeholder="email" value="" required>
+                </div>
+            </div>
+            <div class="form-row row">
+                <div class="col-md-3 mb-3">
+                    <label for="validationDefault03">Блюдо</label>
+                    <select type="text" name="dishs" class="form-control" id="validationDefault02" placeholder="Блюдо" required>
+                        @foreach (var item in ViewBag.Dishes)
+                        {
+                            <option value="@item.Name "> @item.Name </option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-5 mt-auto mb-3">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal"> Добавить новое блюдо </button>
+                </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Рассказать о том, что я ем</button>
+        </form>
+    </section>
+</main>
+<script>
+    Cookies.set('name', 'value');
+    $("#addDishes").on("click", function () {
+        var flagContains = true;
+        var dishes = $(`#validationDefault02 option`).toArray();
+        for (var i = 0; i < dishes.length; i++) {
+            if (dishes[i].text == $("input[name=name]").val())
+            {
+                flagContains = false;
+                break;
+            }
+        }
+        if (flagContains) {
+            $.ajax({
+                type: "POST",
+                crossDomain: true,
+                url: '/',
+                data: {
+                    name: $("input[name=name]").val()
+                },
+                success: function (data) {
+                    $("#addDishes").submit();
+                    location.reload();
+                },
+                error: function () {
+                    alert("Error");
+                }
+            });
+        }
+        else {
+            $("#dishNameHelp").removeClass("d-none");
+        }
+    });
+
+    $("#validationDefault03").on("input", function () {
+        $("#dishNameHelp").addClass("d-none");
+    });
+</script>
